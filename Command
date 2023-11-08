@@ -1,0 +1,46 @@
+from vpython import *
+
+# Define the positionss of the neurons
+neuron_positions = [vec(-2, 0, -2), vec(-2, 2, 0), vec(-2, 0, 2), vec(-2, -2, 0), vec(-2, 0, 0), vec(2, 0, 0)]
+
+# Create the presynaptic neurons as spheres
+pre_neurons = [sphere(pos=pos, radius=0.5, color=color.green) for pos in neuron_positions[:-1]]
+
+# Create the postsynaptic neuron as a sphere
+post_neuron = sphere(pos=neuron_positions[-1], radius=0.5, color=color.red)
+
+# Create labels for each neuron
+for i, pos in enumerate(neuron_positions):
+    if i == 4:
+        text(text='u5', pos=pos+vec(0,0,0.5), align='center', height=0.4)
+    elif i == 5:
+        text(text='v', pos=pos+vec(0,0,0.5), align='center', height=0.4)
+    else:
+        text(text='u'+str(i+1), pos=pos+vec(0,0,0.5), align='center', height=0.4)
+
+# Create the synapses as cylinders connecting each postsynaptic neuron to its corresponding presynaptic neuron
+synapses = [cylinder(pos=post_neuron.pos, axis=pre_neurons[i].pos-post_neuron.pos, radius=0.1, color=color.yellow) for i in range(len(pre_neurons))]
+
+# Create circles perpendicular to arrows
+circles = [ring(pos=synapse.pos+synapse.axis, axis=vector(0, 0, 1), radius=0.15, thickness=0.05, color=color.orange) for synapse in synapses]
+
+# Label the synapses
+for i, synapse in enumerate(synapses):
+    if i == 0:
+        text(text='w1', pos=synapse.pos+synapse.axis, align='center', height=0.4)
+    elif i == 1:
+        text(text='w2', pos=synapse.pos+synapse.axis, align='center', height=0.4)
+    elif i == 2:
+        text(text='w3', pos=synapse.pos+synapse.axis, align='center', height=0.4)
+    elif i == 3:
+        text(text='w4', pos=synapse.pos+synapse.axis, align='center', height=0.4)
+    elif i == 4:
+        text(text='w5', pos=synapse.pos+synapse.axis, align='center', height=0.4)
+
+# Rotate the camera to see the network
+scene.camera.pos = vec(0, 0, 10)
+scene.camera.axis = vec(0, 0, -10)
+
+# Wait for the user to close the window
+while True:
+    rate(30)
